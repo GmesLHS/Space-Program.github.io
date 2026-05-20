@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Space Program</title>
+    <title>Mini Space Program - Inertia Edition</title>
     <style>
         body {
             margin: 0;
@@ -126,25 +126,26 @@
         <!-- Main Menu -->
         <div id="mainMenu" class="screen">
             <h1>Mini Space Program</h1>
-            <p>Launch. Orbit. Stabilize. Return Safely.</p>
+            <p>Real Zero-G Physics & Heavy Rocket Inertia Simulation</p>
             <button class="btn" onclick="startGame()">LAUNCH MISSION</button>
             <div class="controls-hint">
                 <strong>CONTROLS:</strong><br>
-                W / Up Arrow: Main Thrusters<br>
-                A/D or Left/Right Arrow: Rotate Ship
+                W / Up Arrow: Main Thrusters (Gradual Acceleration)<br>
+                A/D or Left/Right Arrow: Precise Rotation
             </div>
         </div>
 
         <!-- Game HUD -->
         <div id="hud" class="hidden">
             <div>Altitude: <span id="altVal">0</span> km</div>
+            <div>Env Gravity: <span id="gravVal">1.0</span> G</div>
             <div>Speed: <span id="speedVal">0</span> m/s</div>
             <div>Vertical Spd: <span id="vSpeedVal">0</span> m/s</div>
             <div id="fuelContainer">Fuel: <span id="fuelVal">100</span>%</div>
         </div>
 
         <div id="objective" class="hidden">
-            <div id="objText">Objective: Reach 200km altitude to begin orbital burn.</div>
+            <div id="objText">Objective: Reach 120km altitude to clear the atmosphere and hit Zero-G.</div>
         </div>
 
         <!-- Game Over Screen -->
@@ -166,7 +167,6 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Resize canvas
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -174,25 +174,24 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // Game States
         const STATES = { MENU: 0, PLAYING: 1, GAMEOVER: 2, VICTORY: 3 };
         let gameState = STATES.MENU;
 
-        // Mission Phases
         const PHASES = { LAUNCH: 0, ORBITING: 1, STABILIZED: 2, REENTRY: 3 };
         let currentPhase = PHASES.LAUNCH;
 
-        // Input tracking
         const keys = {};
         window.addEventListener('keydown', e => keys[e.key] = true);
         window.addEventListener('keyup', e => keys[e.key] = false);
 
-        // Environmental Constants
-        const GRAVITY_CONSTANT = 0.15;
+        // REALISM TWEAKS: Heavy rocket acceleration and zero-g threshold
+        const ENGINE_THRUST = 0.12;       // Cut down by more than half for slower, realistic build-up
+        const ROTATION_SPEED = 0.045;     // Slower, more precise rotation handling
+        const ATMOSPHERE_HEIGHT = 120;    // Boundary line where atmospheric gravity fades to zero
+        const GRAVITY_CONSTANT = 0.08;
         const EARTH_RADIUS = 250;
         let earthX, earthY;
 
-        // Starfield System
         const stars = [];
         for(let i=0; i<150; i++) {
             stars.push({
@@ -203,23 +202,21 @@
             });
         }
 
-        // Particle System for Thrusters
         const particles = [];
         function createExhaust(x, y, angle) {
-            for(let i=0; i<3; i++) {
+            for(let i=0; i<2; i++) {
                 particles.push({
                     x: x,
                     y: y,
-                    vx: Math.cos(angle + Math.PI + (Math.random()-0.5)*0.4) * (Math.random()*4 + 2),
-                    vy: Math.sin(angle + Math.PI + (Math.random()-0.5)*0.4) * (Math.random()*4 + 2),
+                    vx: Math.cos(angle + Math.PI + (Math.random()-0.5)*0.3) * (Math.random()*3 + 1),
+                    vy: Math.sin(angle + Math.PI + (Math.random()-0.5)*0.3) * (Math.random()*3 + 1),
                     life: 1,
-                    size: Math.random() * 4 + 2,
-                    color: `hsl(${Math.random()*30 + 15}, 100%, ${Math.random()*30 + 50}%)`
+                    size: Math.random() * 3 + 1.5,
+                    color: `hsl(${Math.random()*20 + 10}, 100%, ${Math.random()*20 + 50}%)`
                 });
             }
         }
 
-        // Rocket Object
         let rocket = {
             x: 0, y: 0,
             vx: 0, vy: 0,
@@ -240,7 +237,7 @@
 
         function initPositions() {
             earthX = canvas.width / 2;
-            earthY = canvas.height / 2 + 100; // Offset downward slightly for better view
+            earthY = canvas.height / 2 + 100;
             rocket.init();
         }
         initPositions();
@@ -260,18 +257,13 @@
             startGame();
         }
 
-        // Main Loop
         function loop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Dynamic Camera Setup based on Rocket Position
             ctx.save();
             if (gameState === STATES.PLAYING || gameState === STATES.GAMEOVER || gameState === STATES.VICTORY) {
-                // Smoothly center camera between Earth center and Rocket
                 let camX = canvas.width/2 - (rocket.x * 0.4 + earthX * 0.6);
                 let camY = canvas.height/2 - (rocket.y * 0.4 + earthY * 0.6);
-                
-                // Add zoom factor based on altitude
                 let dist = Math.hypot(rocket.x - earthX, rocket.y - earthY);
                 let scale = Math.max(0.4, 1.2 - (dist - EARTH_RADIUS) / 600);
                 
@@ -280,13 +272,12 @@
                 ctx.translate(-canvas.width/2 + camX, -canvas.height/2 + camY);
             }
 
-            // 1. Draw Starfield
+            // Draw Stars
             stars.forEach(star => {
                 let sX = star.x;
                 let sY = star.y;
-                // Menu specific star drift animations
                 if(gameState === STATES.MENU) {
-                    star.y += 0.5;
+                    star.y += 0.3;
                     if(star.y > 1000) star.y = -1000;
                     sX += canvas.width/2;
                     sY += canvas.height/2;
@@ -295,27 +286,24 @@
                 ctx.fillRect(sX, sY, star.size, star.size);
             });
 
-            // 2. Draw Atmosphere and Earth
-            // Atmosphere
-            let atmosGlow = ctx.createRadialGradient(earthX, earthY, EARTH_RADIUS, earthX, earthY, EARTH_RADIUS + 120);
-            atmosGlow.addColorStop(0, 'rgba(0, 150, 255, 0.4)');
-            atmosGlow.addColorStop(0.4, 'rgba(0, 100, 255, 0.15)');
+            // Draw Atmosphere
+            let atmosGlow = ctx.createRadialGradient(earthX, earthY, EARTH_RADIUS, earthX, earthY, EARTH_RADIUS + ATMOSPHERE_HEIGHT);
+            atmosGlow.addColorStop(0, 'rgba(0, 150, 255, 0.35)');
+            atmosGlow.addColorStop(0.6, 'rgba(0, 80, 255, 0.12)');
             atmosGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = atmosGlow;
             ctx.beginPath();
-            ctx.arc(earthX, earthY, EARTH_RADIUS + 120, 0, Math.PI*2);
+            ctx.arc(earthX, earthY, EARTH_RADIUS + ATMOSPHERE_HEIGHT, 0, Math.PI*2);
             ctx.fill();
 
-            // Target Orbit Line Visualizer
-            ctx.strokeStyle = currentPhase === PHASES.LAUNCH ? 'rgba(0, 200, 255, 0.15)' : 'rgba(0, 255, 150, 0.3)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 6]);
+            // Draw Target Orbit Line
+            ctx.strokeStyle = currentPhase === PHASES.LAUNCH ? 'rgba(0, 200, 255, 0.1)' : 'rgba(0, 255, 150, 0.25)';
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.arc(earthX, earthY, EARTH_RADIUS + 180, 0, Math.PI*2);
+            ctx.arc(earthX, earthY, EARTH_RADIUS + 170, 0, Math.PI*2);
             ctx.stroke();
-            ctx.setLineDash([]);
 
-            // Ground/Earth Core
+            // Draw Earth Core
             let earthGrad = ctx.createRadialGradient(earthX, earthY, 10, earthX, earthY, EARTH_RADIUS);
             earthGrad.addColorStop(0, '#112244');
             earthGrad.addColorStop(0.8, '#1a3a6c');
@@ -325,82 +313,74 @@
             ctx.arc(earthX, earthY, EARTH_RADIUS, 0, Math.PI*2);
             ctx.fill();
             
-            // Earth surface details (simple continents)
-            ctx.fillStyle = 'rgba(0, 200, 100, 0.15)';
+            ctx.fillStyle = 'rgba(0, 200, 100, 0.12)';
             ctx.beginPath(); ctx.arc(earthX - 60, earthY - 80, 70, 0, Math.PI*2); ctx.fill();
             ctx.beginPath(); ctx.arc(earthX + 80, earthY + 40, 90, 0, Math.PI*2); ctx.fill();
 
-            // Update & Draw Particles
+            // Exhaust Particles
             for(let i = particles.length - 1; i >= 0; i--) {
                 let p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.life -= 0.03;
-                if(p.life <= 0) {
-                    particles.splice(i, 1);
-                } else {
-                    ctx.fillStyle = p.color;
-                    ctx.globalAlpha = p.life;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-                    ctx.fill();
+                p.x += p.vx; p.y += p.vy; p.life -= 0.04;
+                if(p.life <= 0) { particles.splice(i, 1); } 
+                else {
+                    ctx.fillStyle = p.color; ctx.globalAlpha = p.life;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                     ctx.globalAlpha = 1.0;
                 }
             }
 
-            // 3. Physics & Mechanics Updates
+            // Calculations
             let dx = rocket.x - earthX;
             let dy = rocket.y - earthY;
             let distance = Math.hypot(dx, dy);
             let altitude = distance - EARTH_RADIUS;
 
-            // Gravity Calculation (Pulls towards center of Earth)
+            // REAL ZERO-GRAVITY LOGIC: Gravity completely drops to 0 once you exit the atmosphere
+            let currentGravityScale = 0;
+            if (altitude < ATMOSPHERE_HEIGHT) {
+                // Smoothly taper gravity down to 0 as you approach space edge
+                currentGravityScale = (1 - (altitude / ATMOSPHERE_HEIGHT));
+            }
+            
             let angleToEarth = Math.atan2(dy, dx);
-            let gravityForce = GRAVITY_CONSTANT * (1 / (distance * 0.005));
+            let gravityForce = GRAVITY_CONSTANT * currentGravityScale;
             
             if (gameState === STATES.PLAYING) {
+                // Apply Zero-G / Tapered Gravity Environment
                 rocket.vx -= Math.cos(angleToEarth) * gravityForce;
                 rocket.vy -= Math.sin(angleToEarth) * gravityForce;
 
-                // Handle Inputs
+                // Handle Controls
                 if (keys['w'] || keys['ArrowUp']) {
                     if (rocket.fuel > 0) {
-                        let thrust = 0.28;
-                        rocket.vx += Math.cos(rocket.angle) * thrust;
-                        rocket.vy += Math.sin(rocket.angle) * thrust;
-                        rocket.fuel = Math.max(0, rocket.fuel - 0.15);
+                        rocket.vx += Math.cos(rocket.angle) * ENGINE_THRUST;
+                        rocket.vy += Math.sin(rocket.angle) * ENGINE_THRUST;
+                        rocket.fuel = Math.max(0, rocket.fuel - 0.12);
                         
-                        // Emit tail fire particles
                         let tailX = rocket.x - Math.cos(rocket.angle) * 12;
                         let tailY = rocket.y - Math.sin(rocket.angle) * 12;
                         createExhaust(tailX, tailY, rocket.angle);
                     }
                 }
-                if (keys['a'] || keys['ArrowLeft']) {
-                    rocket.angle -= 0.06;
-                }
-                if (keys['d'] || keys['ArrowRight']) {
-                    rocket.angle += 0.06;
-                }
+                if (keys['a'] || keys['ArrowLeft']) { rocket.angle -= ROTATION_SPEED; }
+                if (keys['d'] || keys['ArrowRight']) { rocket.angle += ROTATION_SPEED; }
 
-                // Apply Positions
                 rocket.x += rocket.vx;
                 rocket.y += rocket.vy;
 
-                // Live Telemetry Calculations
                 let speed = Math.hypot(rocket.vx, rocket.vy) * 50; 
-                // Projection of speed vector onto normal vector from earth
                 let nx = dx / distance;
                 let ny = dy / distance;
                 let verticalSpeed = (rocket.vx * nx + rocket.vy * ny) * 50;
 
-                // Update HUD Elements
+                // Live HUD Telemetry Updates
                 document.getElementById('altVal').innerText = Math.max(0, Math.floor(altitude));
+                document.getElementById('gravVal').innerText = currentGravityScale.toFixed(2);
                 document.getElementById('speedVal').innerText = Math.floor(speed);
                 
                 let vSpdElem = document.getElementById('vSpeedVal');
                 vSpdElem.innerText = Math.floor(verticalSpeed);
-                if (currentPhase === PHASES.REENTRY && verticalSpeed < -120) {
+                if (currentPhase === PHASES.REENTRY && verticalSpeed < -60) {
                     vSpdElem.classList.add('alert');
                 } else {
                     vSpdElem.classList.remove('alert');
@@ -408,116 +388,85 @@
                 
                 document.getElementById('fuelVal').innerText = Math.ceil(rocket.fuel);
 
-                // Game Rule Engine (Phases and Conditions)
+                // Objective Mission Engine
                 let objText = document.getElementById('objText');
 
                 if (currentPhase === PHASES.LAUNCH) {
-                    objText.innerHTML = "🎯 <strong>Objective:</strong> Fly upwards! Reach 180km altitude to begin orbital injection.";
-                    if (altitude >= 180) {
-                        currentPhase = PHASES.ORBITING;
-                    }
+                    objText.innerHTML = "🎯 <strong>Objective:</strong> Thrust upward. Reach 120km altitude to escape the atmosphere and enter 0-G space.";
+                    if (altitude >= 120) { currentPhase = PHASES.ORBITING; }
                 } 
                 else if (currentPhase === PHASES.ORBITING) {
-                    objText.innerHTML = "🔄 <strong>Objective:</strong> Turn sideways (90° relative to Earth) and hold down thrusters to generate horizontal orbit speed!";
+                    objText.innerHTML = "🔄 <strong>Objective:</strong> Turn completely sideways (90°). Use thrust to build horizontal velocity without falling back down.";
                     
-                    // Check if trajectory is circularized/stabilized
-                    // Speed must be balanced around perfect orbit speed profile and vertical speed close to zero
-                    if (altitude >= 160 && altitude <= 230 && Math.abs(verticalSpeed) < 25 && speed > 220) {
+                    // Orbit Check: True 0-G requires careful stabilization near target ring path
+                    if (altitude >= 140 && altitude <= 200 && Math.abs(verticalSpeed) < 15 && speed > 110) {
                         rocket.orbitTimer += 1;
-                        objText.innerHTML = `⏳ <strong>Stabilizing Orbit...</strong> Hold steady: ${Math.floor((60 - rocket.orbitTimer)/15)}s`;
+                        objText.innerHTML = `⏳ <strong>Stabilizing Orbit...</strong> drift steady: ${Math.floor((60 - rocket.orbitTimer)/15)}s`;
                         if (rocket.orbitTimer >= 60) {
                             currentPhase = PHASES.STABILIZED;
-                            rocket.fuel = Math.min(100, rocket.fuel + 40); // Reward fuel bonus for entry back down
+                            rocket.fuel = Math.min(100, rocket.fuel + 50); // Replenish thruster fuel reserves
                         }
                     } else {
                         rocket.orbitTimer = 0;
                     }
                 } 
                 else if (currentPhase === PHASES.STABILIZED) {
-                    objText.innerHTML = "✅ <strong>Orbit Established!</strong><br>🚀 <strong>Next Objective:</strong> Face your nose opposite your trajectory and fire thrusters to decelerate and return to Earth safely.";
-                    if (altitude < 150) {
-                        currentPhase = PHASES.REENTRY;
-                    }
+                    objText.innerHTML = "✅ <strong>Orbit Locked!</strong><br>🚀 <strong>Next Objective:</strong> Rotate your craft 180° backward from your drift direction and thrust to burn back into the atmosphere.";
+                    if (altitude < 120) { currentPhase = PHASES.REENTRY; }
                 } 
                 else if (currentPhase === PHASES.REENTRY) {
-                    objText.innerHTML = "🚨 <strong>CRITICAL RE-ENTRY!</strong> Keep <strong>Vertical Speed ABOVE -120 m/s</strong> using your thrusters to land soft and safely!";
+                    objText.innerHTML = "🚨 <strong>ATMOSPHERIC RE-ENTRY!</strong> Gravity is reclaiming your ship! Maintain a <strong>Vertical Speed ABOVE -60 m/s</strong> for a safe impact touchdown.";
                 }
 
-                // Crash & Land Conditions
+                // Crash / Landing Safety Limits
                 if (distance <= EARTH_RADIUS + 8) {
                     if (currentPhase === PHASES.REENTRY || currentPhase === PHASES.LAUNCH) {
-                        if (Math.abs(verticalSpeed) <= 120) {
+                        if (Math.abs(verticalSpeed) <= 60) { // Slower, more realistic survival threshold
                             if (currentPhase === PHASES.REENTRY) {
                                 gameState = STATES.VICTORY;
                                 document.getElementById('victoryScreen').classList.remove('hidden');
                             } else {
-                                // Simple reset if soft touched during initial pad launch failure
                                 rocket.init();
                             }
                         } else {
-                            // High Speed Impact Explosion
                             gameState = STATES.GAMEOVER;
-                            document.getElementById('overTitle').innerText = "CRITICAL IMPACT";
-                            document.getElementById('overDesc').innerText = `You slammed into the planet surface at ${Math.floor(Math.abs(verticalSpeed))} m/s! Max safe landing speed is 120 m/s.`;
+                            document.getElementById('overTitle').innerText = "STRUCTURAL CRASH DAMAGE";
+                            document.getElementById('overDesc').innerText = `Your landing impact velocity was ${Math.floor(Math.abs(verticalSpeed))} m/s! Max safe structural threshold is 60 m/s.`;
                             document.getElementById('gameOverScreen').classList.remove('hidden');
                             createExplosion(rocket.x, rocket.y);
                         }
                     } else {
                         gameState = STATES.GAMEOVER;
-                        document.getElementById('overTitle').innerText = "ATMOSPHERIC DISINTEGRATION";
-                        document.getElementById('overDesc').innerText = "You fell out of orbit without structural deceleration.";
+                        document.getElementById('overTitle').innerText = "UNCONTROLLED BALLISTIC IMPACT";
+                        document.getElementById('overDesc').innerText = "You dropped straight out of deep space without breaking speed.";
                         document.getElementById('gameOverScreen').classList.remove('hidden');
                         createExplosion(rocket.x, rocket.y);
                     }
                 }
             }
 
-            // 4. Draw Rocket
+            // Draw Craft
             if (gameState !== STATES.GAMEOVER) {
                 ctx.save();
                 ctx.translate(rocket.x, rocket.y);
                 ctx.rotate(rocket.angle);
 
-                // Simple Visual Indicator for Orientation pointing down to menu
                 ctx.fillStyle = '#e0e0e0';
-                // Rocket Body Cone Shapes
                 ctx.beginPath();
-                ctx.moveTo(15, 0);
-                ctx.lineTo(-10, -7);
-                ctx.lineTo(-10, 7);
-                ctx.closePath();
-                ctx.fill();
+                ctx.moveTo(15, 0); ctx.lineTo(-10, -7); ctx.lineTo(-10, 7);
+                ctx.closePath(); ctx.fill();
                 
-                // Cockpit Window Blue Tint
                 ctx.fillStyle = '#00c8ff';
                 ctx.fillRect(2, -3, 4, 6);
 
-                // Engines Fins Red
                 ctx.fillStyle = '#ff3366';
-                ctx.beginPath();
-                ctx.moveTo(-10, -7);
-                ctx.lineTo(-15, -12);
-                ctx.lineTo(-10, -2);
-                ctx.closePath();
-                ctx.fill();
-                ctx.beginPath();
-                ctx.moveTo(-10, 7);
-                ctx.lineTo(-15, 12);
-                ctx.lineTo(-10, 2);
-                ctx.closePath();
-                ctx.fill();
+                ctx.beginPath(); ctx.moveTo(-10, -7); ctx.lineTo(-15, -12); ctx.lineTo(-10, -2); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(-10, 7); ctx.lineTo(-15, 12); ctx.lineTo(-10, 2); ctx.closePath(); ctx.fill();
 
                 ctx.restore();
             }
 
-            // Restore Main Scene Cam Context
             ctx.restore();
-
-            // Menu Animations Specific Rendering Overlay Over background engine
-            if (gameState === STATES.MENU) {
-                // Generate light menu graphics if needed
-            }
-
             requestAnimationFrame(loop);
         }
 
@@ -525,16 +474,15 @@
             for(let i=0; i<40; i++) {
                 particles.push({
                     x: x, y: y,
-                    vx: (Math.random() - 0.5) * 15,
-                    vy: (Math.random() - 0.5) * 15,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
                     life: 1.0,
-                    size: Math.random() * 12 + 4,
+                    size: Math.random() * 10 + 3,
                     color: i % 2 === 0 ? '#ff5500' : '#ffcc00'
                 });
             }
         }
 
-        // Run Engine
         requestAnimationFrame(loop);
     </script>
 </body>

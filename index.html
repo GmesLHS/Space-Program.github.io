@@ -3,178 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Space Program: Enhanced Edition</title>
+    <title>Mini Space Program: Shop & Stations</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #050510;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
-        }
-        canvas {
-            display: block;
-            margin: 0 auto;
-            background: radial-gradient(circle at center, #0c0f26 0%, #050510 100%);
-        }
-        .ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        .screen {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-            pointer-events: auto;
-            transition: opacity 0.3s ease;
-            background: rgba(5, 5, 20, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-            min-width: 320px;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-top: 0;
-            margin-bottom: 5px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(0, 200, 255, 0.5); }
-            to { text-shadow: 0 0 30px rgba(0, 200, 255, 0.9), 0 0 10px rgba(0, 255, 150, 0.5); }
-        }
-        p {
-            font-size: 1.1rem;
-            color: #8fa0dd;
-            margin-bottom: 25px;
-        }
-        .mode-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .btn {
-            background: linear-gradient(45deg, #00c8ff, #00ff96);
-            border: none;
-            color: #050510;
-            padding: 14px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 255, 150, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 25px rgba(0, 255, 150, 0.6);
-        }
-        .btn-alt {
-            background: linear-gradient(45deg, #ff3366, #ff7700);
-            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
-        }
-        .btn-alt:hover {
-            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
-        }
-        .controls-hint {
-            font-size: 0.85rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #aaa;
-            line-height: 1.4;
-        }
-        .hidden {
-            display: none !important;
-        }
-        #hud {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #00ff96;
-            font-family: monospace;
-            font-size: 1.1rem;
-            background: rgba(5, 5, 16, 0.8);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 150, 0.2);
-            pointer-events: none;
-            line-height: 1.5;
-        }
-        #objective {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: #00c8ff;
-            font-family: monospace;
-            font-size: 1.1rem;
-            background: rgba(5, 5, 16, 0.8);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 128, 255, 0.3);
-            max-width: 320px;
-            text-align: right;
-            line-height: 1.4;
-        }
-        /* Space Upgrades Shop Styling */
-        #shopOverlay {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 15, 35, 0.85);
-            border: 2px solid #ffd700;
-            padding: 15px 25px;
-            border-radius: 15px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            pointer-events: auto;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-        }
-        .shop-title {
-            color: #ffd700;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-        }
-        .shop-btn {
-            background: #1a234a;
-            border: 1px solid #ffd700;
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        .shop-btn:hover {
-            background: #ffd700;
-            color: #050510;
-        }
-        .alert {
-            color: #ff3366 !important;
-            animation: blink 0.5s infinite alternate;
-        }
-        @keyframes blink {
-            from { opacity: 0.4; }
-            to { opacity: 1; }
-        }
+        body { margin: 0; padding: 0; background: #050510; overflow: hidden; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        canvas { display: block; margin: 0 auto; background: radial-gradient(circle at center, #0c0f26 0%, #050510 100%); }
+        .ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .screen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff; pointer-events: auto; background: rgba(5, 5, 20, 0.9); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 200, 255, 0.2); min-width: 320px; box-shadow: 0 0 30px #000; }
+        h1 { font-size: 2.5rem; margin: 0 0 10px; text-transform: uppercase; text-shadow: 0 0 15px rgba(0, 200, 255, 0.6); }
+        p { color: #8fa0dd; margin: 0 0 20px; }
+        .mode-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .btn { background: linear-gradient(45deg, #00c8ff, #00ff96); border: none; color: #050510; padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,255,150,0.3); transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.03); }
+        .btn-alt { background: linear-gradient(45deg, #ff3366, #ff7700); }
+        .hidden { display: none !important; }
+        #hud { position: absolute; top: 20px; left: 20px; color: #00ff96; font-family: monospace; font-size: 1.1rem; background: rgba(5,5,16,0.8); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,255,150,0.2); pointer-events: none; }
+        #objective { position: absolute; top: 20px; right: 20px; color: #00c8ff; font-family: monospace; font-size: 1.1rem; background: rgba(5,5,16,0.8); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,128,255,0.3); max-width: 300px; text-align: right; }
+        
+        /* Minecraft MineCoin Theme Gold Accent */
+        .gold-txt { color: #ffda00; font-weight: bold; text-shadow: 1px 1px 0px #7a5f00, 0 0 10px rgba(255,218,0,0.4); }
+        
+        /* Coin Popup Alert Fading Animation */
+        #coinAlert { position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; pointer-events: none; opacity: 0; transition: opacity 0.3s; font-family: monospace; z-index: 100; }
+        .fade-in-out { animation: coinFade 1.2s forwards; }
+        @keyframes coinFade { 0% { opacity: 0; transform: translate(-50%, -30%); } 20% { opacity: 1; transform: translate(-50%, -50%); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -70%); } }
+        
+        /* Persistent Modular Shop Interface Overlay */
+        #gameShop { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(10,15,35,0.9); border: 2px solid #ffda00; padding: 10px 20px; border-radius: 15px; pointer-events: auto; display: flex; gap: 20px; align-items: center; box-shadow: 0 0 20px rgba(0,0,0,0.6); }
+        .shop-item { display: flex; flex-direction: column; align-items: center; color: #fff; font-size: 0.85rem; font-family: monospace; }
+        .shop-btn { background: #ffda00; border: none; color: #111; font-weight: bold; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 4px; font-size: 0.8rem; }
+        .shop-btn:hover { background: #fff; }
     </style>
 </head>
 <body>
@@ -182,64 +40,63 @@
     <canvas id="gameCanvas"></canvas>
 
     <div class="ui-layer">
+        <div id="coinAlert" class="gold-txt">+1 MineCoin</div>
+
         <!-- Main Menu -->
         <div id="mainMenu" class="screen">
             <h1>Mini Space Program</h1>
-            <p>Select Destination (Real 0-G & Heavy Inertia Physics)</p>
-            
+            <p>Select Destination (0-G & Low Thrust)</p>
             <div class="mode-container">
-                <button class="btn" onclick="launchMission('EARTH')">🌍 MISSION: EARTH ORBIT (ISS Available)</button>
+                <button class="btn" onclick="launchMission('EARTH')">🌍 MISSION: EARTH ORBIT</button>
                 <button class="btn" style="background: linear-gradient(45deg, #a0a0a0, #e0e0e0);" onclick="launchMission('MOON')">🌑 MISSION: LUNAR ORBIT</button>
                 <button class="btn" style="background: linear-gradient(45deg, #ff7744, #ff4433);" onclick="launchMission('MARS')">🔴 MISSION: MARS ORBIT</button>
             </div>
+            <div style="color: #ffda00; font-family: monospace;">Wallet: <span id="menuCoins">0</span> MineCoins</div>
+        </div>
 
-            <div class="controls-hint">
-                <strong>FLIGHT CONTROLS:</strong><br>
-                W / Up Arrow: Main Engine Thrust (Gradual Acceleration)<br>
-                A / D or Left / Right Arrow: Ship Rotation Control Wheel
+        <!-- HUD -->
+        <div id="hud" class="hidden">
+            <div>Target: <strong id="hudTarget">EARTH</strong></div>
+            <div>Altitude: <span id="altVal">0</span> km</div>
+            <div>Gravity: <span id="gravVal">1.00</span> G</div>
+            <div>Speed: <span id="speedVal">0</span> m/s</div>
+            <div>Vert Spd: <span id="vSpeedVal">0</span> m/s</div>
+            <div>Fuel: <span id="fuelVal">100</span>%</div>
+            <div class="gold-txt">Coins: <span id="hudCoins">0</span></div>
+        </div>
+
+        <!-- Dynamic Objective -->
+        <div id="objective" class="hidden"><div id="objText">Initializing...</div></div>
+
+        <!-- Dynamic Shop Trigger Interface overlay -->
+        <div id="gameShop" class="hidden">
+            <div class="gold-txt" style="font-size:1.1rem; font-family:monospace; margin-right:10px;">SHOP:</div>
+            <div class="shop-item">
+                <span>⚡ Thruster Speed</span>
+                <button class="shop-btn" onclick="buyUpgrade('speed')">Buy (1 Coin)</button>
+            </div>
+            <div class="shop-item">
+                <span>⛽ Max Fuel Tank</span>
+                <button class="shop-btn" onclick="buyUpgrade('fuel')">Buy (1 Coin)</button>
             </div>
         </div>
 
-        <!-- HUD Overlay -->
-        <div id="hud" class="hidden">
-            <div>Target Body: <strong id="hudTarget">EARTH</strong></div>
-            <div>Altitude: <span id="altVal">0</span> km</div>
-            <div>Local Gravity: <span id="gravVal">1.00</span> G</div>
-            <div>Speed: <span id="speedVal">0</span> m/s</div>
-            <div>Vertical Spd: <span id="vSpeedVal">0</span> m/s</div>
-            <div>Fuel Level: <span id="fuelVal">100</span>%</div>
-            <div style="color: #ffd700; font-weight: bold; margin-top: 5px;">MineCoins: <span id="coinVal">0</span></div>
-        </div>
-
-        <!-- Objective Tracker -->
-        <div id="objective" class="hidden">
-            <div id="objText">Objective initialized...</div>
-        </div>
-
-        <!-- Shop (Hidden until 1 coin is harvested) -->
-        <div id="shopOverlay" class="hidden">
-            <div class="shop-title">🚀 SPACE UPGRADES SHOP:</div>
-            <button class="shop-btn" onclick="buyUpgrade('FUEL')">Refuel Tank (Cost: 2 Coins)</button>
-            <button class="shop-btn" onclick="buyUpgrade('SPEED')">Upgrade Speed (Cost: 3 Coins)</button>
-        </div>
-
-        <!-- Pop-up Screen: Mission Failed -->
+        <!-- Pop-ups -->
         <div id="gameOverScreen" class="screen hidden">
             <h1 style="color: #ff3366;">MISSION FAILED</h1>
-            <p id="overDesc">Your spacecraft was destroyed.</p>
+            <p id="overDesc">Spacecraft destroyed.</p>
             <div style="display: flex; gap: 15px; justify-content: center;">
-                <button class="btn btn-alt" onclick="restartGame()">RETRY MISSION</button>
-                <button class="btn" style="background: #445577; color: white; box-shadow: none;" onclick="returnToMenu()">MAIN MENU</button>
+                <button class="btn btn-alt" onclick="restartGame()">RETRY</button>
+                <button class="btn" style="background:#445577; color:#fff;" onclick="returnToMenu()">MENU</button>
             </div>
         </div>
 
-        <!-- Pop-up Screen: Success -->
         <div id="victoryScreen" class="screen hidden">
             <h1 style="color: #00ff96;">MISSION SUCCESS</h1>
-            <p id="victoryDesc">Safe landing profile achieved successfully!</p>
+            <p id="victoryDesc">Safe landing profile achieved.</p>
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button class="btn" onclick="restartGame()">FLY AGAIN</button>
-                <button class="btn" style="background: #445577; color: white; box-shadow: none;" onclick="returnToMenu()">MAIN MENU</button>
+                <button class="btn" style="background:#445577; color:#fff;" onclick="returnToMenu()">MENU</button>
             </div>
         </div>
     </div>
@@ -247,24 +104,18 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
 
         const STATES = { MENU: 0, PLAYING: 1, GAMEOVER: 2, VICTORY: 3 };
         let gameState = STATES.MENU;
-
         const PHASES = { LAUNCH: 0, ORBITING: 1, STABILIZED: 2, REENTRY: 3 };
         let currentPhase = PHASES.LAUNCH;
 
         const PLANETS = {
-            EARTH: { name: "Earth", radius: 240, gravity: 0.08, color1: "#112244", color2: "#1a3a6c", atmosColor: "rgba(0, 120, 255, 0.35)", atmosphere: 110, safeSpeed: 55, safeOrbit: 110 },
-            MOON:  { name: "Moon",  radius: 170, gravity: 0.02, color1: "#222222", color2: "#444444", atmosColor: "rgba(255, 255, 255, 0.05)", atmosphere: 20, safeSpeed: 35, safeOrbit: 40 },
-            MARS:  { name: "Mars",  radius: 200, gravity: 0.04, color1: "#441100", color2: "#883311", atmosColor: "rgba(240, 100, 50, 0.25)", atmosphere: 80, safeSpeed: 45, safeOrbit: 75 }
+            EARTH: { name: "Earth", radius: 240, gravity: 0.08, color1: "#1a3a6c", color2: "#0d254c", atmosColor: "rgba(0,120,255,0.3)", atmosphere: 110, safeSpeed: 55, safeOrbit: 110, hasISS: true },
+            MOON:  { name: "Moon",  radius: 170, gravity: 0.02, color1: "#333333", color2: "#222222", atmosColor: "rgba(255,255,255,0.05)", atmosphere: 20, safeSpeed: 35, safeOrbit: 40, hasISS: false },
+            MARS:  { name: "Mars",  radius: 200, gravity: 0.04, color1: "#883311", color2: "#441100", atmosColor: "rgba(240,100,50,0.2)", atmosphere: 80, safeSpeed: 45, safeOrbit: 75, hasISS: false }
         };
         let currentPlanet = PLANETS.EARTH;
 
@@ -272,391 +123,315 @@
         window.addEventListener('keydown', e => keys[e.key] = true);
         window.addEventListener('keyup', e => keys[e.key] = false);
 
-        // Core Upgradable Mechanics Settings
-        let currentThrust = 0.11;
-        const ROTATION_SPEED = 0.045;
+        // Core Upgradable Metrics Tracker
+        let wallet = 0;
+        let thrustUpgradeLevel = 0;
+        let fuelUpgradeLevel = 0;
 
-        // Inventory
-        let mineCoins = 0;
-        let shopUnlocked = false;
+        let stars = [], particles = [], meteors = [], fallingCoins = [];
+        for(let i=0; i<150; i++) stars.push({ x: Math.random()*3000-1500, y: Math.random()*3000-1500, size: Math.random()*2+1 });
 
-        let stars = [];
-        let particles = [];
-        let meteors = [];
-        let coins = [];
-        let popups = [];
-
-        // International Space Station Object Configuration
-        let iss = {
-            angle: 0,
-            orbitRadius: 420, // High above Earth atmosphere 
-            size: 16
-        };
-
-        // Static Background Generation
-        for(let i=0; i<160; i++) {
-            stars.push({
-                x: Math.random() * 3000 - 1500,
-                y: Math.random() * 3000 - 1500,
-                size: Math.random() * 2 + 1,
-                color: ['#fff', '#00c8ff', '#ffe8bd'][Math.floor(Math.random()*3)]
-            });
-        }
+        // Iss Object Layout Configuration
+        let iss = { angle: 0, orbitRadius: 390, radius: 10 };
 
         let rocket = {
-            x: 0, y: 0, vx: 0, vy: 0,
-            angle: -Math.PI / 2,
-            fuel: 100, orbitTimer: 0,
+            x: 0, y: 0, vx: 0, vy: 0, angle: -Math.PI / 2, fuel: 100, orbitTimer: 0,
             init: function(planet) {
                 this.x = canvas.width / 2;
                 this.y = (canvas.height / 2 + 100) - planet.radius - 15;
-                this.vx = 0; this.vy = 0;
-                this.angle = -Math.PI / 2;
-                this.fuel = 100; this.orbitTimer = 0;
+                this.vx = 0; this.vy = 0; this.angle = -Math.PI / 2;
+                this.fuel = 100 + (fuelUpgradeLevel * 40);
+                this.orbitTimer = 0;
             }
         };
 
         function spawnMeteors(planet) {
-            meteors = [];
-            coins = [];
-            let count = planet.name === "Earth" ? 15 : planet.name === "Moon" ? 25 : 20; 
+            meteors = []; fallingCoins = [];
+            let count = planet.name === "Earth" ? 15 : planet.name === "Moon" ? 24 : 18; 
             for(let i=0; i<count; i++) {
-                let angle = Math.random() * Math.PI * 2;
-                // High starting space drift zone
-                let spawnRadius = planet.radius + planet.atmosphere + 120 + Math.random() * 450;
-                
-                // Track trajectory pulled slowly inward towards planet center
-                let pX = canvas.width / 2;
-                let pY = canvas.height / 2 + 100;
-                let targetX = pX + Math.cos(angle) * spawnRadius;
-                let targetY = pY + Math.sin(angle) * spawnRadius;
-                
-                // Create trajectory vectors heading generally down to the core
-                let angleToCore = Math.atan2(pY - targetY, pX - targetX) + (Math.random() - 0.5) * 0.4;
-
+                let ang = Math.random()*Math.PI*2;
+                let rad = planet.radius + planet.atmosphere + 80 + Math.random()*350;
                 meteors.push({
-                    x: targetX,
-                    y: targetY,
-                    vx: Math.cos(angleToCore) * (Math.random() * 0.5 + 0.3),
-                    vy: Math.sin(angleToCore) * (Math.random() * 0.5 + 0.3),
-                    radius: Math.random() * 12 + 10,
-                    isOnFire: false
+                    x: canvas.width/2 + Math.cos(ang)*rad, y: (canvas.height/2+100) + Math.sin(ang)*rad,
+                    vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8,
+                    radius: Math.random()*12+10, isBurning: false
                 });
             }
         }
 
         function launchMission(planetKey) {
             currentPlanet = PLANETS[planetKey];
-            gameState = STATES.PLAYING;
-            currentPhase = PHASES.LAUNCH;
-
-            // Reset Shop Items for the session run
-            if(!shopUnlocked) {
-                document.getElementById('shopOverlay').classList.add('hidden');
-            }
-
             document.getElementById('mainMenu').classList.add('hidden');
             document.getElementById('gameOverScreen').classList.add('hidden');
             document.getElementById('victoryScreen').classList.add('hidden');
             document.getElementById('hud').classList.remove('hidden');
             document.getElementById('objective').classList.remove('hidden');
             document.getElementById('hudTarget').innerText = currentPlanet.name.toUpperCase();
-            document.getElementById('coinVal').innerText = mineCoins;
-
+            
             rocket.init(currentPlanet);
             spawnMeteors(currentPlanet);
+            updateShopVisibility();
+            gameState = STATES.PLAYING;
+            currentPhase = PHASES.LAUNCH;
         }
 
-        function restartGame() {
-            launchMission(currentPlanet.name.toUpperCase());
-        }
-
+        function restartGame() { launchMission(currentPlanet.name.toUpperCase()); }
         function returnToMenu() {
             gameState = STATES.MENU;
             document.getElementById('gameOverScreen').classList.add('hidden');
             document.getElementById('victoryScreen').classList.add('hidden');
             document.getElementById('hud').classList.add('hidden');
             document.getElementById('objective').classList.add('hidden');
-            document.getElementById('shopOverlay').classList.add('hidden');
+            document.getElementById('gameShop').classList.add('hidden');
             document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('menuCoins').innerText = wallet;
         }
 
-        // Shop Upgrades Transaction Processing System
+        function triggerPopup() {
+            const el = document.getElementById('coinAlert');
+            el.classList.remove('fade-in-out');
+            void el.offsetWidth; // Refresh reflow element
+            el.classList.add('fade-in-out');
+        }
+
+        function updateShopVisibility() {
+            const shop = document.getElementById('gameShop');
+            if (wallet >= 1 && gameState === STATES.PLAYING) { shop.classList.remove('hidden'); } 
+            else { shop.classList.add('hidden'); }
+            document.getElementById('hudCoins').innerText = wallet;
+        }
+
         function buyUpgrade(type) {
-            if (type === 'FUEL') {
-                if (mineCoins >= 2) {
-                    mineCoins -= 2;
-                    rocket.fuel = Math.min(100, rocket.fuel + 45);
-                    createGoldTextPopup("Refueled Tank!", rocket.x, rocket.y);
-                } else {
-                    createGoldTextPopup("Need 2 Coins!", rocket.x, rocket.y);
+            if (wallet >= 1) {
+                wallet--;
+                if (type === 'speed') thrustUpgradeLevel++;
+                if (type === 'fuel') {
+                    fuelUpgradeLevel++;
+                    rocket.fuel += 40;
                 }
-            } else if (type === 'SPEED') {
-                if (mineCoins >= 3) {
-                    mineCoins -= 3;
-                    currentThrust += 0.03; // Multiplier boost acceleration mechanics
-                    createGoldTextPopup("Engine Upgraded!", rocket.x, rocket.y);
-                } else {
-                    createGoldTextPopup("Need 3 Coins!", rocket.x, rocket.y);
-                }
-            }
-            document.getElementById('coinVal').innerText = mineCoins;
-        }
-
-        function createExhaust(x, y, angle) {
-            for(let i=0; i<2; i++) {
-                particles.push({
-                    x: x, y: y,
-                    vx: Math.cos(angle + Math.PI + (Math.random()-0.5)*0.3) * (Math.random()*3 + 1),
-                    vy: Math.sin(angle + Math.PI + (Math.random()-0.5)*0.3) * (Math.random()*3 + 1),
-                    life: 1, size: Math.random() * 3 + 1,
-                    color: `hsl(${Math.random()*20 + 10}, 100%, ${Math.random()*20 + 50}%)`
-                });
+                updateShopVisibility();
             }
         }
 
-        function createGoldTextPopup(text, x, y) {
-            popups.push({
-                text: text,
-                x: x,
-                y: y - 20,
-                life: 60 // Drops framing cycle counter over 1 second lifetime 
-            });
-        }
-
-        function triggerFailure(causeString) {
+        function triggerFailure(desc) {
             gameState = STATES.GAMEOVER;
-            document.getElementById('overDesc').innerText = causeString;
+            document.getElementById('overDesc').innerText = desc;
             document.getElementById('gameOverScreen').classList.remove('hidden');
-            
-            for(let i=0; i<45; i++) {
-                particles.push({
-                    x: rocket.x, y: rocket.y,
-                    vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12,
-                    life: 1.0, size: Math.random() * 9 + 3,
-                    color: i % 2 === 0 ? '#ff4400' : '#ffcc00'
-                });
-            }
+            document.getElementById('gameShop').classList.add('hidden');
+            for(let i=0; i<30; i++) particles.push({ x: rocket.x, y: rocket.y, vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10, life: 1, size: Math.random()*8+2, color: '#ff5500' });
         }
 
         function loop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            let pX = canvas.width / 2;
-            let pY = canvas.height / 2 + 100;
+            let pX = canvas.width / 2, pY = canvas.height / 2 + 100;
 
             ctx.save();
             if (gameState !== STATES.MENU) {
-                let camX = canvas.width/2 - (rocket.x * 0.4 + pX * 0.6);
-                let camY = canvas.height/2 - (rocket.y * 0.4 + pY * 0.6);
                 let dist = Math.hypot(rocket.x - pX, rocket.y - pY);
-                let scale = Math.max(0.32, 1.25 - (dist - currentPlanet.radius) / 650);
-                
-                ctx.translate(canvas.width/2, canvas.height/2);
-                ctx.scale(scale, scale);
-                ctx.translate(-canvas.width/2 + camX, -canvas.height/2 + camY);
+                let scale = Math.max(0.35, 1.25 - (dist - currentPlanet.radius)/650);
+                ctx.translate(canvas.width/2, canvas.height/2); ctx.scale(scale, scale);
+                ctx.translate(-canvas.width/2 + (canvas.width/2 - (rocket.x*0.4 + pX*0.6)), -canvas.height/2 + (canvas.height/2 - (rocket.y*0.4 + pY*0.6)));
             }
 
-            // Draw Background Stars
+            // Star Backdrop
             stars.forEach(star => {
-                let sX = star.x; let sY = star.y;
-                if(gameState === STATES.MENU) {
-                    star.y += 0.25; if(star.y > 1500) star.y = -1500;
-                    sX += canvas.width/2; sY += canvas.height/2;
-                }
-                ctx.fillStyle = star.color;
-                ctx.fillRect(sX, sY, star.size, star.size);
+                let sX = star.x, sY = star.y;
+                if(gameState === STATES.MENU) { star.y += 0.2; if(star.y > 1500) star.y = -1500; sX += canvas.width/2; sY += canvas.height/2; }
+                ctx.fillStyle = '#fff'; ctx.fillRect(sX, sY, star.size, star.size);
             });
 
-            // 1. Planet Atmosphere Visual Core
+            // Planet Atmosphere & Base Sphere Rendering
             let atmosGlow = ctx.createRadialGradient(pX, pY, currentPlanet.radius, pX, pY, currentPlanet.radius + currentPlanet.atmosphere);
-            atmosGlow.addColorStop(0, currentPlanet.atmosColor);
-            atmosGlow.addColorStop(0.8, currentPlanet.atmosColor.replace('0.', '0.05'));
-            atmosGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = atmosGlow;
-            ctx.beginPath(); ctx.arc(pX, pY, currentPlanet.radius + currentPlanet.atmosphere, 0, Math.PI*2); ctx.fill();
+            atmosGlow.addColorStop(0, currentPlanet.atmosColor); atmosGlow.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = atmosGlow; ctx.beginPath(); ctx.arc(pX, pY, currentPlanet.radius + currentPlanet.atmosphere, 0, Math.PI*2); ctx.fill();
 
-            // Safe Flight Target Path Circle
-            ctx.strokeStyle = currentPhase === PHASES.LAUNCH ? 'rgba(0, 200, 255, 0.12)' : 'rgba(0, 255, 150, 0.25)';
+            ctx.strokeStyle = currentPhase === PHASES.LAUNCH ? 'rgba(0,200,255,0.1)' : 'rgba(0,255,150,0.2)';
             ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(pX, pY, currentPlanet.radius + currentPlanet.safeOrbit, 0, Math.PI*2); ctx.stroke();
 
-            // 2. Planet Surface
             let coreGrad = ctx.createRadialGradient(pX, pY, 10, pX, pY, currentPlanet.radius);
             coreGrad.addColorStop(0, currentPlanet.color1); coreGrad.addColorStop(1, currentPlanet.color2);
             ctx.fillStyle = coreGrad; ctx.beginPath(); ctx.arc(pX, pY, currentPlanet.radius, 0, Math.PI*2); ctx.fill();
 
-            // Dynamic Smoke Particles Engine Processing
-            for(let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i]; p.x += p.vx; p.y += p.vy; p.life -= 0.03;
-                if(p.life <= 0) { particles.splice(i, 1); } 
-                else {
-                    ctx.fillStyle = p.color; ctx.globalAlpha = p.life;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
-                    ctx.globalAlpha = 1.0;
-                }
-            }
-
-            // Live Math Framework Elements
-            let dx = rocket.x - pX;
-            let dy = rocket.y - pY;
-            let distance = Math.hypot(dx, dy);
-            let altitude = distance - currentPlanet.radius;
-
-            let gravityMultiplier = 0;
-            if (altitude < currentPlanet.atmosphere) {
-                gravityMultiplier = (1 - (altitude / currentPlanet.atmosphere));
-            }
-            let gravityPull = currentPlanet.gravity * gravityMultiplier;
-            let angleToCore = Math.atan2(dy, dx);
-
-            // 🚀 ISS Logic & Rendering Loop (Earth Only Feature)
-            if (currentPlanet.name === "Earth" && gameState !== STATES.MENU) {
-                // Increment orbital rotation path values over timeline cycles
-                iss.angle += 0.003; 
+            // International Space Station (ISS) Execution
+            if (currentPlanet.hasISS) {
+                iss.angle += 0.003;
                 let issX = pX + Math.cos(iss.angle) * iss.orbitRadius;
                 let issY = pY + Math.sin(iss.angle) * iss.orbitRadius;
 
-                // Render ISS Body Frame structures
-                ctx.save();
-                ctx.translate(issX, issY);
-                ctx.rotate(iss.angle + Math.PI/2);
-                
-                // Central Dock Core Node Module
-                ctx.fillStyle = "#e0e0e0";
-                ctx.fillRect(-4, -8, 8, 16);
-                // Solar Array Cross Truss bars 
-                ctx.fillStyle = "#888888";
-                ctx.fillRect(-22, -2, 44, 4);
-                // Dual Solar Array Panels (Blue Metallic Silicon tinting grid)
-                ctx.fillStyle = "#0055ff";
-                ctx.fillRect(-26, -10, 8, 20);
-                ctx.fillRect(18, -10, 8, 20);
-                ctx.restore();
+                // Render Structure Base Visuals
+                ctx.fillStyle = "#8fa0dd"; ctx.fillRect(issX - 18, issY - 4, 36, 8); 
+                ctx.fillStyle = "#44ccff"; ctx.fillRect(issX - 14, issY - 12, 6, 24); ctx.fillRect(issX + 8, issY - 12, 6, 24);
+                ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(issX, issY, 5, 0, Math.PI*2); ctx.fill();
 
-                // Proximity Dock Verification Checks
-                let shipToIssDist = Math.hypot(rocket.x - issX, rocket.y - issY);
-                if (shipToIssDist < iss.size + 12 && gameState === STATES.PLAYING) {
-                    let totalSpeed = Math.hypot(rocket.vx, rocket.vy) * 50;
-                    if (totalSpeed <= 40) {
-                        // Successful Docking Profile Achieved 
-                        gameState = STATES.VICTORY;
-                        document.getElementById('victoryDesc').innerText = "Incredible tracking control! You successfully matched vector frames and docked safely with the International Space Station!";
-                        document.getElementById('victoryScreen').classList.remove('hidden');
-                    } else {
-                        triggerFailure(`Docking failure! You collided into the International Space Station structural array framework at an unstable speed of ${Math.floor(totalSpeed)} m/s! Max docking threshold is 40 m/s.`);
+                // Proximity Docking Calculation Matrix Evaluation
+                if (gameState === STATES.PLAYING) {
+                    let dockDist = Math.hypot(rocket.x - issX, rocket.y - issY);
+                    if (dockDist < 18) {
+                        let shipSpd = Math.hypot(rocket.vx, rocket.vy) * 50;
+                        if (shipSpd < 45) {
+                            gameState = STATES.VICTORY;
+                            document.getElementById('victoryDesc').innerText = "Incredible maneuver! You safely docked with the International Space Station.";
+                            document.getElementById('victoryScreen').classList.remove('hidden');
+                            document.getElementById('gameShop').classList.add('hidden');
+                        } else {
+                            triggerFailure(`Collision event! You slammed into the ISS at an unsafe speed of ${Math.floor(shipSpd)} m/s!`);
+                        }
                     }
                 }
             }
 
-            // ☄️ Meteor Atmosphere & Burning Processing
-            for (let i = meteors.length - 1; i >= 0; i--) {
-                let met = meteors[i];
+            // Engine Trail Smoke Processing
+            for(let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i]; p.x += p.vx; p.y += p.vy; p.life -= 0.03;
+                if(p.life <= 0) particles.splice(i,1);
+                else { ctx.fillStyle = p.color; ctx.globalAlpha = p.life; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); ctx.globalAlpha = 1; }
+            }
+
+            // MineCoin Gold Drops Rendering and Collision Matrix
+            for (let i = fallingCoins.length - 1; i >= 0; i--) {
+                let cn = fallingCoins[i];
+                // Slowly fall towards planet surface core gravity pull
+                let cDx = cn.x - pX, cDy = cn.y - pY, cDist = Math.hypot(cDx, cDy);
+                cn.x -= (cDx / cDist) * 0.4; cn.y -= (cDy / cDist) * 0.4;
+
+                // Draw MineCoin Octagon Gold Base
+                ctx.fillStyle = "#ffda00"; ctx.beginPath(); ctx.arc(cn.x, cn.y, 7, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = "#b58c00"; ctx.lineWidth = 1.5; ctx.stroke();
+                ctx.fillStyle = "#ffffff"; ctx.font = "bold 7px monospace"; ctx.fillText("C", cn.x - 2.5, cn.y + 2.5);
+
+                if (gameState === STATES.PLAYING) {
+                    let collectDist = Math.hypot(rocket.x - cn.x, rocket.y - cn.y);
+                    if (collectDist < 16) {
+                        fallingCoins.splice(i, 1);
+                        wallet++;
+                        triggerPopup();
+                        updateShopVisibility();
+                        continue;
+                    }
+                }
+                if (cDist <= currentPlanet.radius) fallingCoins.splice(i, 1);
+            }
+
+            // Dynamics for Obstacle Meteors
+            meteors.forEach(met => {
                 met.x += met.vx; met.y += met.vy;
-                
-                let mDx = met.x - pX; let mDy = met.y - pY;
-                let mDist = Math.hypot(mDx, mDy);
-                let mAlt = mDist - currentPlanet.radius;
+                let mDx = met.x - pX, mDy = met.y - pY, mDist = Math.hypot(mDx, mDy);
 
-                // 1. Atmosphere Check: Ignites if descending inside boundary air layers
-                if (mAlt < currentPlanet.atmosphere) {
-                    met.isOnFire = true;
-                    // Emit trailing atmospheric entry friction fire exhaust particles
-                    if (Math.random() < 0.4) {
-                        particles.push({
-                            x: met.x, y: met.y,
-                            vx: -met.vx * 0.5 + (Math.random()-0.5)*1,
-                            vy: -met.vy * 0.5 + (Math.random()-0.5)*1,
-                            life: 0.6, size: Math.random() * 5 + 2,
-                            color: '#ff6600'
-                        });
-                    }
-                } else {
-                    met.isOnFire = false;
-                }
+                // Ignite on entering atmosphere boundaries
+                if (mDist < currentPlanet.radius + currentPlanet.atmosphere) met.isBurning = true;
 
-                // 2. Render Meteor Body Frame
-                ctx.fillStyle = met.isOnFire ? "#ff4500" : "#554e4a";
-                ctx.beginPath(); ctx.arc(met.x, met.y, met.radius, 0, Math.PI*2); ctx.fill();
-                
-                if (met.isOnFire) {
-                    // Burning Atmosphere Friction Flare Highlights Overlays
-                    ctx.fillStyle = "#ffcc00";
-                    ctx.beginPath(); ctx.arc(met.x, met.y, met.radius * 0.6, 0, Math.PI*2); ctx.fill();
-                }
+                if (met.isBurning) {
+                    // Fire particles trailing behind
+                    if (Math.random() > 0.4) particles.push({ x: met.x, y: met.y, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2, life: 0.6, size: Math.random()*5+2, color: '#ff3300' });
+                    ctx.fillStyle = "#ff6600";
+                } else { ctx.fillStyle = "#554e4a"; }
 
-                // 3. Surface Crash Explosion and Coin Drop Processing Logic Matrix
-                if (mDist <= currentPlanet.radius) {
-                    // Spawn fiery planetary impact shockwave rings
-                    for (let j = 0; j < 15; j++) {
-                        particles.push({
-                            x: met.x, y: met.y,
-                            vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6,
-                            life: 0.8, size: Math.random() * 6 + 2,
-                            color: '#ffaa00'
-                        });
-                    }
-
-                    // 💰 DROP GLOWING MINECRAFT-STYLE GOLD MINECOIN AT IMPACT LOCATION
-                    if (gameState === STATES.PLAYING) {
-                        coins.push({
-                            x: met.x,
-                            y: met.y,
-                            size: 10,
-                            pulse: 0
-                        });
-                    }
-
-                    // Remove spent meteor item from simulation index array mapping 
-                    meteors.splice(i, 1);
-                    continue;
-                }
-            }
-
-            // 💰 Render and Evaluate MineCoins Tracking Boundaries
-            for (let i = coins.length - 1; i >= 0; i--) {
-                let coin = coins[i];
-                coin.pulse += 0.1;
-                let dynamicSize = coin.size + Math.sin(coin.pulse) * 1.5;
-
-                // Render Minecraft Gold Hexagonal Coin Frame Geometry 
-                ctx.fillStyle = "#ffd700"; // Rich Golden Core
-                ctx.strokeStyle = "#b59400"; // Dark Golden Border
-                ctx.lineWidth = 2;
-                
-                ctx.beginPath();
-                ctx.arc(coin.x, coin.y, dynamicSize, 0, Math.PI*2);
-                ctx.fill();
-                ctx.stroke();
-
-                // Inner Embossed Square Core Detail
-                ctx.fillStyle = "#fff199";
-                ctx.fillRect(coin.x - dynamicSize*0.3, coin.y - dynamicSize*0.3, dynamicSize*0.6, dynamicSize*0.6);
-
-                // Magnet Collection Checks
-                let coinDist = Math.hypot(rocket.x - coin.x, rocket.y - coin.y);
-                if (coinDist < coin.size + 14 && gameState === STATES.PLAYING) {
-                    mineCoins++;
-                    document.getElementById('coinVal').innerText = mineCoins;
+                // Hit planet surface core constraint
+                if (mDist <= currentPlanet.radius + 4) {
+                    // Explode on impact and seed a gold coin reward drop
+                    for(let k=0; k<15; k++) particles.push({ x: met.x, y: met.y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6, life: 0.8, size: Math.random()*6+2, color: '#ffaa00' });
+                    fallingCoins.push({ x: met.x, y: met.y });
                     
-                    // Trigger Fading Floating Text Graphic Overlay Popup
-                    createGoldTextPopup("+1 MineCoin", coin.x, coin.y);
-
-                    // Unlock Upgrades Shop interface systematically upon collecting first coin
-                    if (!shopUnlocked) {
-                        shopUnlocked = true;
-                        document.getElementById('shopOverlay').classList.remove('hidden');
-                    }
-
-                    coins.splice(i, 1);
+                    // Reset meteor back to outer deep space boundary
+                    let rAng = Math.random()*Math.PI*2;
+                    met.x = pX + Math.cos(rAng)*(currentPlanet.radius + currentPlanet.atmosphere + 300);
+                    met.y = pY + Math.sin(rAng)*(currentPlanet.radius + currentPlanet.atmosphere + 300);
+                    met.isBurning = false;
                 }
-            }
 
-            // Playback Management Engine Processes
+                // Visual Profile Render
+                ctx.beginPath(); ctx.arc(met.x, met.y, met.radius, 0, Math.PI*2); ctx.fill();
+            });
+
+            // Spaceflight Controls Processing & Kinematics Engine
+            let dx = rocket.x - pX, dy = rocket.y - pY, distance = Math.hypot(dx, dy), altitude = distance - currentPlanet.radius;
+            let gravityScale = altitude < currentPlanet.atmosphere ? (1 - (altitude / currentPlanet.atmosphere)) : 0;
+            let gravityPull = currentPlanet.gravity * gravityScale, angleToCore = Math.atan2(dy, dx);
+
             if (gameState === STATES.PLAYING) {
-                rocket.vx -= Math.cos(angleToCore) * gravityPull;
-                rocket.vy -= Math.sin(angleToCore) * gravityPull;
+                rocket.vx -= Math.cos(angleToCore) * gravityPull; rocket.vy -= Math.sin(angleToCore) * gravityPull;
 
                 if (keys['w'] || keys['ArrowUp']) {
                     if (rocket.fuel > 0) {
-                        rocket.vx += Math.cos(rocket.angle) * currentThrust;
-                        rocket.vy += Math.sin
+                        let activeThrust = ENGINE_THRUST + (thrustUpgradeLevel * 0.03);
+                        rocket.vx += Math.cos(rocket.angle) * activeThrust;
+                        rocket.vy += Math.sin(rocket.angle) * activeThrust;
+                        rocket.fuel = Math.max(0, rocket.fuel - 0.15);
+                        particles.push({ x: rocket.x - Math.cos(rocket.angle)*12, y: rocket.y - Math.sin(rocket.angle)*12, vx: Math.cos(rocket.angle+Math.PI)*3, vy: Math.sin(rocket.angle+Math.PI)*3, life: 0.8, size: 3, color: '#ffcc00' });
+                    }
+                }
+                if (keys['a'] || keys['ArrowLeft']) rocket.angle -= ROTATION_SPEED;
+                if (keys['d'] || keys['ArrowRight']) rocket.angle += ROTATION_SPEED;
+
+                rocket.x += rocket.vx; rocket.y += rocket.vy;
+
+                let totalSpeed = Math.hypot(rocket.vx, rocket.vy) * 50, verticalSpeed = ((rocket.vx * dx / distance) + (rocket.vy * dy / distance)) * 50;
+
+                // Sync UI Panel Updates
+                document.getElementById('altVal').innerText = Math.max(0, Math.floor(altitude));
+                document.getElementById('gravVal').innerText = gravityScale.toFixed(2);
+                document.getElementById('speedVal').innerText = Math.floor(totalSpeed);
+                document.getElementById('vSpeedVal').innerText = Math.floor(verticalSpeed);
+                document.getElementById('fuelVal').innerText = Math.ceil((rocket.fuel / (100 + fuelUpgradeLevel * 40)) * 100);
+
+                // Meteor Ship Critical Impacts
+                meteors.forEach(met => {
+                    if (Math.hypot(rocket.x - met.x, rocket.y - met.y) < met.radius + 8) {
+                        if (totalSpeed > 90) { triggerFailure(`Mission Failed! Meteor impact at an extreme velocity of ${Math.floor(totalSpeed)} m/s!`); } 
+                        else {
+                            let bAng = Math.atan2(rocket.y - met.y, rocket.x - met.x);
+                            rocket.vx = Math.cos(bAng)*1.6; rocket.vy = Math.sin(bAng)*1.6;
+                        }
+                    }
+                });
+
+                // Phase Mechanics
+                let objBox = document.getElementById('objText');
+                if (currentPhase === PHASES.LAUNCH) {
+                    objBox.innerHTML = currentPlanet.hasISS ? `🎯 <b>Objective:</b> Fly up to 0-G space. Match trajectory with the floating <b>ISS Station</b> to attempt docking speed (<45 m/s)!` : `🎯 <b>Objective:</b> Launch out of atmospheric drag zone (${currentPlanet.atmosphere}km) into 0-G open space orbit.`;
+                    if (altitude >= currentPlanet.atmosphere) currentPhase = PHASES.ORBITING;
+                } 
+                else if (currentPhase === PHASES.ORBITING) {
+                    objBox.innerHTML = `🔄 <b>Objective:</b> Turn sideways parallel to the curve and burn engine to achieve stable orbit velocity (>100 m/s).`;
+                    if (altitude >= currentPlanet.safeOrbit-20 && altitude <= currentPlanet.safeOrbit+40 && Math.abs(verticalSpeed) < 14 && totalSpeed > 95) {
+                        rocket.orbitTimer++; if (rocket.orbitTimer >= 60) { currentPhase = PHASES.STABILIZED; rocket.fuel += 50; }
+                    } else rocket.orbitTimer = 0;
+                } 
+                else if (currentPhase === PHASES.STABILIZED) {
+                    objBox.innerHTML = `✅ <b>Orbit Locked!</b><br>🚀 Burn backward against drift course vectors to break altitude constraints and sink downward.`;
+                    if (altitude < currentPlanet.atmosphere) currentPhase = PHASES.REENTRY;
+                } 
+                else if (currentPhase === PHASES.REENTRY) {
+                    objBox.innerHTML = `🚨 <b>RE-ENTRY DESCENT ACCELERATION!</b> Maintain <b>Vertical Landing Velocity ABOVE -${currentPlanet.safeSpeed} m/s</b> for landing profiles.`;
+                }
+
+                // Crash & Safe Touchdown Bounds Evaluation
+                if (distance <= currentPlanet.radius + 8) {
+                    if (Math.abs(verticalSpeed) <= currentPlanet.safeSpeed && (currentPhase === PHASES.REENTRY || currentPhase === PHASES.LAUNCH)) {
+                        if (currentPhase === PHASES.REENTRY) {
+                            gameState = STATES.VICTORY;
+                            document.getElementById('victoryDesc').innerText = `Phenomenal touchdown parameters safely met on ${currentPlanet.name}!`;
+                            document.getElementById('victoryScreen').classList.remove('hidden');
+                            document.getElementById('gameShop').classList.add('hidden');
+                        } else rocket.init(currentPlanet);
+                    } else { triggerFailure(`Mission Failed! Hard landing structural collision profile clocked at ${Math.floor(Math.abs(verticalSpeed))} m/s.`); }
+                }
+            }
+
+            // Ship Body Canvas Draw
+            if (gameState !== STATES.GAMEOVER) {
+                ctx.save(); ctx.translate(rocket.x, rocket.y); ctx.rotate(rocket.angle);
+                ctx.fillStyle = '#e0e0e0'; ctx.beginPath(); ctx.moveTo(14,0); ctx.lineTo(-10,-7); ctx.lineTo(-10,7); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = '#00c8ff'; ctx.fillRect(1,-3,4,6);
+                ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.moveTo(-10,-7); ctx.lineTo(-14,-11); ctx.lineTo(-10,-2); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(-10,7); ctx.lineTo(-14,11); ctx.lineTo(-10,2); ctx.closePath(); ctx.fill();
+                ctx.restore();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>

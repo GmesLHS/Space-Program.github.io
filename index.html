@@ -368,19 +368,38 @@
                         } else { triggerFailure(`Collision event! You smashed into the ISS at an unsafe speed of ${Math.floor(shipSpd)} m/s!`); }
                     }
                 }
+// MineCoins Matrix Rendering 
+for (let i = fallingCoins.length - 1; i >= 0; i--) {
+    let cn = fallingCoins[i];
+    let cDx = cn.x - pX, cDy = cn.y - pY, cDist = Math.hypot(cDx, cDy);
+    
+    // Pull the coins slowly toward the planet
+    cn.x -= (cDx / cDist) * 0.4; cn.y -= (cDy / cDist) * 0.4;
 
-                // Coins Drops Handling Profiles
-                for (let i = fallingCoins.length - 1; i >= 0; i--) {
-                    let cn = fallingCoins[i];
-                    let cDx = cn.x - pX, cDy = cn.y - pY, cDist = Math.hypot(cDx, cDy);
-                    cn.x -= (cDx / cDist) * 0.4; cn.y -= (cDy / cDist) * 0.4;
-                    ctx.fillStyle = "#ffda00"; ctx.beginPath(); ctx.arc(cn.x, cn.y, 7, 0, Math.PI*2); ctx.fill();
-                    ctx.fillStyle = "#ffffff"; ctx.font = "bold 7px monospace"; ctx.fillText("C", cn.x - 2.5, cn.y + 2.5);
-                    if (gameState === STATES.PLAYING && Math.hypot(rocket.x - cn.x, rocket.y - cn.y) < 16) {
-                        fallingCoins.splice(i, 1); wallet++; triggerPopup(); updateShopVisibility(); continue;
-                    }
-                    if (cDist <= currentPlanet.radius) fallingCoins.splice(i, 1);
-                }
+    // Draw MineCoin Octagon Gold Base
+    ctx.fillStyle = "#ffda00"; ctx.beginPath(); ctx.arc(cn.x, cn.y, 7, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "#b58c00"; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = "#ffffff"; ctx.font = "bold 7px monospace"; ctx.fillText("C", cn.x - 2.5, cn.y + 2.5);
+
+    if (gameState === STATES.PLAYING) {
+        let collectDist = Math.hypot(rocket.x - cn.x, rocket.y - cn.y);
+        if (collectDist < 16) {
+            fallingCoins.splice(i, 1);
+            wallet++;
+            triggerPopup();
+            updateShopVisibility();
+            continue;
+        }
+    }
+
+    // 🔥 FIX: Instead of splicing (deleting), make them bounce off the surface!
+    if (cDist <= currentPlanet.radius + 2) {
+        let bounceAngle = Math.atan2(cDy, cDx);
+        // Push it slightly outward so it doesn't get stuck in the surface
+        cn.x = pX + Math.cos(bounceAngle) * (currentPlanet.radius + 6);
+        cn.y = pY + Math.sin(bounceAngle) * (currentPlanet.radius + 6);
+    }
+}
 
                 // Regular Meteors loop properties
                 meteors.forEach(met => {
